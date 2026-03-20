@@ -2,40 +2,177 @@ import { describe, test, expect } from "bun:test";
 import { api, authenticatedApi, signUpTestUser, expectStatus, connectWebSocket, connectAuthenticatedWebSocket, waitForMessage } from "./helpers";
 
 describe("API Integration Tests", () => {
-  // Shared state for chaining tests (e.g., created resource IDs, auth tokens)
-  // let authToken: string;
-  // let resourceId: string;
+  // GET /api/questions tests
+  test("GET /api/questions with valid category (scramble)", async () => {
+    const res = await api("/api/questions?category=scramble");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.questions)).toBe(true);
+  });
 
-  // TODO: Add integration tests here.
-  // Tests run sequentially within describe, so you can chain state between them.
-  //
-  // Example without auth:
-  //
-  // test("Create resource", async () => {
-  //   const res = await api("/api/resources", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ name: "Test" }),
-  //   });
-  //   await expectStatus(res, 201);
-  //   const data = await res.json();
-  //   resourceId = data.id;
-  // });
-  //
-  // Example with auth (cleanup is automatic):
-  //
-  // test("Sign up test user", async () => {
-  //   const { token, user } = await signUpTestUser();
-  //   authToken = token;
-  //   expect(authToken).toBeDefined();
-  // });
-  //
-  // test("Create authenticated resource", async () => {
-  //   const res = await authenticatedApi("/api/resources", authToken, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ name: "Test" }),
-  //   });
-  //   await expectStatus(res, 201);
-  // });
+  test("GET /api/questions with valid category (fill_in_blank)", async () => {
+    const res = await api("/api/questions?category=fill_in_blank");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.questions)).toBe(true);
+  });
+
+  test("GET /api/questions with valid category (books_blitz)", async () => {
+    const res = await api("/api/questions?category=books_blitz");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.questions)).toBe(true);
+  });
+
+  test("GET /api/questions with difficulty filter", async () => {
+    const res = await api("/api/questions?category=scramble&difficulty=easy");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.questions)).toBe(true);
+  });
+
+  test("GET /api/questions with limit parameter", async () => {
+    const res = await api("/api/questions?category=scramble&limit=5");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(data.questions.length).toBeLessThanOrEqual(5);
+  });
+
+  test("GET /api/questions without required category parameter returns 400", async () => {
+    const res = await api("/api/questions");
+    await expectStatus(res, 400);
+  });
+
+  test("GET /api/questions with invalid category returns 400", async () => {
+    const res = await api("/api/questions?category=invalid");
+    await expectStatus(res, 400);
+  });
+
+  // GET /api/scores tests
+  test("GET /api/scores retrieves scores", async () => {
+    const res = await api("/api/scores");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.scores)).toBe(true);
+  });
+
+  test("GET /api/scores with game_mode filter (scramble)", async () => {
+    const res = await api("/api/scores?game_mode=scramble");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.scores)).toBe(true);
+  });
+
+  test("GET /api/scores with game_mode filter (fill_in_blank)", async () => {
+    const res = await api("/api/scores?game_mode=fill_in_blank");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(Array.isArray(data.scores)).toBe(true);
+  });
+
+  test("GET /api/scores with limit parameter", async () => {
+    const res = await api("/api/scores?limit=5");
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(data.scores.length).toBeLessThanOrEqual(5);
+  });
+
+  // POST /api/scores tests
+  test("POST /api/scores creates a new score", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "TestPlayer",
+        game_mode: "scramble",
+        score: 100,
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(res, 201);
+    const data = await res.json();
+    expect(data.id).toBeDefined();
+    expect(data.playerName).toBe("TestPlayer");
+  });
+
+  test("POST /api/scores with fill_in_blank mode", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "TestPlayer2",
+        game_mode: "fill_in_blank",
+        score: 75,
+        correct_answers: 6,
+        total_questions: 10,
+        time_taken_seconds: 60,
+      }),
+    });
+    await expectStatus(res, 201);
+    const data = await res.json();
+    expect(data.id).toBeDefined();
+  });
+
+  test("POST /api/scores without player_name returns 400", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        game_mode: "scramble",
+        score: 100,
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(res, 400);
+  });
+
+  test("POST /api/scores without game_mode returns 400", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "TestPlayer",
+        score: 100,
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(res, 400);
+  });
+
+  test("POST /api/scores with invalid game_mode enum returns 400", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "TestPlayer",
+        game_mode: "invalid_mode",
+        score: 100,
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(res, 400);
+  });
+
+  test("POST /api/scores without score returns 400", async () => {
+    const res = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "TestPlayer",
+        game_mode: "scramble",
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(res, 400);
+  });
 });
