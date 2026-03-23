@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "make-a-word-game-wit",
+    "name": "Parable Path",
     "slug": "make-a-word-game-wit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icon-ijc.png",
+    "icon": "./assets/images/62f2e5c7-19ce-48bd-8e99-1ff24565ab17.jpeg",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/app-icon-ijc.png",
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon-ijc.png",
+        "foregroundImage": "./assets/images/62f2e5c7-19ce-48bd-8e99-1ff24565ab17.jpeg",
         "backgroundColor": "#000000"
       },
       "package": "com.placeholder.app"
