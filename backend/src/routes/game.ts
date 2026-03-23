@@ -45,7 +45,8 @@ export function register(app: App, fastify: FastifyInstance) {
           limit: {
             type: 'integer',
             default: 10,
-            description: 'Maximum number of questions to return',
+            maximum: 50,
+            description: 'Maximum number of questions to return (default 10, max 50)',
           },
         },
       },
@@ -82,22 +83,20 @@ export function register(app: App, fastify: FastifyInstance) {
       },
     },
   }, async (request: FastifyRequest<{ Querystring: GetQuestionsQuery }>, reply: FastifyReply) => {
-    const { category, difficulty, limit = 10 } = request.query;
+    const { category, difficulty = 'medium', limit = 10 } = request.query;
+    const finalLimit = Math.min(limit, 50);
 
-    app.logger.info({ category, difficulty, limit }, 'Fetching questions');
+    app.logger.info({ category, difficulty, limit: finalLimit }, 'Fetching questions');
 
     try {
-      const conditions = [eq(schema.gameQuestions.category, category)];
-      if (difficulty) {
-        conditions.push(eq(schema.gameQuestions.difficulty, difficulty));
-      }
+      const conditions = [eq(schema.gameQuestions.category, category), eq(schema.gameQuestions.difficulty, difficulty)];
 
       const questions = await app.db
         .select()
         .from(schema.gameQuestions)
         .where(and(...conditions))
         .orderBy(sql`RANDOM()`)
-        .limit(limit);
+        .limit(finalLimit);
 
       app.logger.info({ count: questions.length }, 'Questions retrieved successfully');
 
