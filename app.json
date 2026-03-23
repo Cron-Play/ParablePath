@@ -4,10 +4,10 @@
     "slug": "make-a-word-game-wit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/62f2e5c7-19ce-48bd-8e99-1ff24565ab17.jpeg",
+    "icon": "./assets/images/Golden path to the sun.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/app-icon-ijc.png",
+      "image": "./assets/images/Golden path to the sun.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/62f2e5c7-19ce-48bd-8e99-1ff24565ab17.jpeg",
+        "foregroundImage": "./assets/images/Golden path to the sun.png",
         "backgroundColor": "#000000"
       },
       "package": "com.placeholder.app"
