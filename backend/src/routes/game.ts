@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, ilike } from 'drizzle-orm';
 import * as schema from '../db/schema/schema.js';
 import type { App } from '../index.js';
 
@@ -21,6 +21,10 @@ interface CreateScoreBody {
   correct_answers: number;
   total_questions: number;
   time_taken_seconds: number;
+}
+
+interface DeleteScoresByPlayerBody {
+  player_name: string;
 }
 
 export function register(app: App, fastify: FastifyInstance) {
@@ -254,6 +258,62 @@ export function register(app: App, fastify: FastifyInstance) {
       return reply.status(201).send(createdScore);
     } catch (error) {
       app.logger.error({ err: error, player_name, game_mode }, 'Failed to create score');
+      throw error;
+    }
+  });
+
+  fastify.delete('/api/scores/by-player', {
+    schema: {
+      description: 'Delete all scores for a player by name',
+      tags: ['game'],
+      body: {
+        type: 'object',
+        required: ['player_name'],
+        properties: {
+          player_name: { type: 'string', description: 'Player name to delete scores for' },
+        },
+      },
+      response: {
+        200: {
+          description: 'Scores deleted successfully',
+          type: 'object',
+          properties: {
+            deleted_count: { type: 'integer' },
+          },
+        },
+        400: {
+          description: 'Bad request',
+          type: 'object',
+          properties: {
+            error: { type: 'string' },
+          },
+        },
+      },
+    },
+  }, async (request: FastifyRequest<{ Body: DeleteScoresByPlayerBody }>, reply: FastifyReply) => {
+    let { player_name } = request.body;
+
+    player_name = player_name?.trim() || '';
+
+    app.logger.info({ player_name: player_name || '(empty)' }, 'Deleting scores by player');
+
+    if (!player_name) {
+      app.logger.warn('Delete request with missing player_name');
+      return reply.status(400).send({ error: 'player_name is required' });
+    }
+
+    try {
+      const result = await app.db
+        .delete(schema.gameScores)
+        .where(ilike(schema.gameScores.playerName, player_name))
+        .returning();
+
+      const deletedCount = result.length;
+      app.logger.info({ player_name, deleted_count: deletedCount }, 'Scores deleted successfully');
+
+      return { deleted_count: deletedCount };
+    } catch (error) {
+      app.logger.error({ err: error, player_name }, 'Failed to delete scores by player');
       throw error;
     }
   });

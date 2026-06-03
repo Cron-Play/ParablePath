@@ -269,4 +269,56 @@ describe("API Integration Tests", () => {
     });
     await expectStatus(res, 400);
   });
+
+  // DELETE /api/scores/by-player tests
+  test("DELETE /api/scores/by-player deletes all scores for a player", async () => {
+    // First, create a score for a unique player
+    const createRes = await api("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "DeleteTestPlayer",
+        game_mode: "scramble",
+        score: 100,
+        correct_answers: 8,
+        total_questions: 10,
+        time_taken_seconds: 45,
+      }),
+    });
+    await expectStatus(createRes, 201);
+
+    // Delete all scores for this player
+    const deleteRes = await api("/api/scores/by-player", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "DeleteTestPlayer",
+      }),
+    });
+    await expectStatus(deleteRes, 200);
+    const deleteData = await deleteRes.json();
+    expect(deleteData.deleted_count).toBeGreaterThanOrEqual(1);
+  });
+
+  test("DELETE /api/scores/by-player with nonexistent player returns 200 with 0 deleted", async () => {
+    const res = await api("/api/scores/by-player", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: "NonexistentPlayer12345",
+      }),
+    });
+    await expectStatus(res, 200);
+    const data = await res.json();
+    expect(data.deleted_count).toBe(0);
+  });
+
+  test("DELETE /api/scores/by-player without player_name returns 400", async () => {
+    const res = await api("/api/scores/by-player", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    await expectStatus(res, 400);
+  });
 });
