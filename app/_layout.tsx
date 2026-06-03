@@ -124,6 +124,22 @@ export default function RootLayout() {
                     },
                   }}
                 />
+                <Stack.Screen
+                  name="delete-data"
+                  options={{
+                    headerShown: true,
+                    title: 'Delete My Data',
+                    headerBackButtonDisplayMode: 'minimal',
+                    headerStyle: { backgroundColor: COLORS.background },
+                    headerTintColor: COLORS.accent,
+                    headerShadowVisible: false,
+                    headerTitleStyle: {
+                      fontFamily: 'Cinzel_600SemiBold',
+                      color: COLORS.accent,
+                      fontSize: 17,
+                    },
+                  }}
+                />
               </Stack>
               <SystemBars style="light" />
             </GestureHandlerRootView>

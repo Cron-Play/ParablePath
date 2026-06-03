@@ -124,6 +124,11 @@ export default function HomeScreen() {
     router.push('/leaderboard');
   }
 
+  function handleDeleteDataPress() {
+    console.log('[HomeScreen] Delete My Data link pressed');
+    router.push('/delete-data');
+  }
+
   return (
     <View style={[styles.root, { paddingTop: insets.top }]}>
       <ScrollView
@@ -277,6 +282,13 @@ export default function HomeScreen() {
             </Text>
             <Text style={styles.footerVerseRef}>— Psalm 119:105</Text>
           </View>
+        </AnimatedCard>
+
+        {/* Delete My Data */}
+        <AnimatedCard index={6}>
+          <AnimatedPressable onPress={handleDeleteDataPress} style={styles.deleteDataLink}>
+            <Text style={styles.deleteDataLinkText}>Delete My Data</Text>
+          </AnimatedPressable>
         </AnimatedCard>
       </ScrollView>
     </View>
@@ -489,5 +501,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato_700Bold',
     fontSize: 12,
     color: COLORS.textTertiary,
+  },
+  deleteDataLink: {
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  deleteDataLinkText: {
+    fontFamily: 'Lato_400Regular',
+    fontSize: 12,
+    color: COLORS.textTertiary,
+    textDecorationLine: 'underline',
   },
 });
