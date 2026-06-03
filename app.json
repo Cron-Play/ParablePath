@@ -4,10 +4,10 @@
     "slug": "parable-path",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Path to the glowing cross.png",
+    "icon": "./assets/images/Golden path to the sun.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/Path to the glowing cross.png",
+      "image": "./assets/images/Golden path to the sun.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/Path to the glowing cross.png",
+        "foregroundImage": "./assets/images/Golden path to the sun.png",
         "backgroundColor": "#000000"
       },
       "package": "com.placeholder.app"
