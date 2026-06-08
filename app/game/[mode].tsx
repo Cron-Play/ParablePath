@@ -17,7 +17,7 @@ import { AnimatedPressable } from '@/components/AnimatedPressable';
 import { BIBLE_BOOKS, getCanonicalBookName } from '@/constants/BibleBooks';
 import * as Haptics from 'expo-haptics';
 
-const BASE_URL = 'https://5d3mwfcssu8hxwz88va2peyxv4tkxk9r.app.specular.dev';
+const BASE_URL = 'https://p85df9uqmvg68rwnzwrt7e2zf325zy92.app.specular.dev';
 
 interface Question {
   id: string;
