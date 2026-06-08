@@ -4,7 +4,7 @@
     "slug": "parable-path",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Path to the glowing cross.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/Path to the glowing cross.png",
