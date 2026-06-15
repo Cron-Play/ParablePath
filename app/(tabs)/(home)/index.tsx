@@ -5,7 +5,9 @@ import {
   ScrollView,
   Animated,
   StyleSheet,
+  Platform,
 } from 'react-native';
+import NativeAdCard from '@/components/NativeAdCard';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Shuffle, BookOpen, Zap, Trophy, Cross } from 'lucide-react-native';
@@ -263,8 +265,15 @@ export default function HomeScreen() {
           );
         })}
 
+        {/* Native Ad (Android only) */}
+        {Platform.OS === 'android' && (
+          <AnimatedCard index={4}>
+            <NativeAdCard />
+          </AnimatedCard>
+        )}
+
         {/* Leaderboard Button */}
-        <AnimatedCard index={4}>
+        <AnimatedCard index={5}>
           <AnimatedPressable
             onPress={handleLeaderboardPress}
             style={styles.leaderboardBtn}
@@ -275,7 +284,7 @@ export default function HomeScreen() {
         </AnimatedCard>
 
         {/* Footer verse */}
-        <AnimatedCard index={5}>
+        <AnimatedCard index={6}>
           <View style={styles.footerVerse}>
             <Text style={styles.footerVerseText}>
               "Your word is a lamp to my feet and a light to my path."
@@ -285,7 +294,7 @@ export default function HomeScreen() {
         </AnimatedCard>
 
         {/* Delete My Data */}
-        <AnimatedCard index={6}>
+        <AnimatedCard index={7}>
           <AnimatedPressable onPress={handleDeleteDataPress} style={styles.deleteDataLink}>
             <Text style={styles.deleteDataLinkText}>Delete My Data</Text>
           </AnimatedPressable>

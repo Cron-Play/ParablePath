@@ -33,7 +33,13 @@
       "expo-font",
       "expo-router",
       "expo-web-browser",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-9075835145391390~7222254160"
+        }
+      ]
     ],
     "scheme": "parablepath",
     "experiments": {
@@ -41,7 +47,7 @@
     },
     "extra": {
       "router": {},
-      "backendUrl": "https://5d3mwfcssu8hxwz88va2peyxv4tkxk9r.app.specular.dev"
+      "backendUrl": "https://p85df9uqmvg68rwnzwrt7e2zf325zy92.app.specular.dev"
     }
   }
 }

@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@/constants/GameColors';
 import { AnimatedPressable } from '@/components/AnimatedPressable';
 
-const BASE_URL = 'https://5d3mwfcssu8hxwz88va2peyxv4tkxk9r.app.specular.dev';
+const BASE_URL = 'https://p85df9uqmvg68rwnzwrt7e2zf325zy92.app.specular.dev';
 
 export default function DeleteDataScreen() {
   const router = useRouter();
