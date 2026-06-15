@@ -13,7 +13,7 @@ import { Medal, Trophy, RefreshCw } from 'lucide-react-native';
 import { COLORS } from '@/constants/GameColors';
 import { AnimatedPressable } from '@/components/AnimatedPressable';
 
-const BASE_URL = 'https://p85df9uqmvg68rwnzwrt7e2zf325zy92.app.specular.dev';
+const BASE_URL = 'https://jywq8gxb4m4zxstgqncjyjbn3wbk3m9r.app.specular.dev';
 
 interface Score {
   id: string;
